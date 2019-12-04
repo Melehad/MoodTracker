@@ -16,4 +16,12 @@
     <color name="blue">#a5468ad9</color>
     <color name="green">#ffb8e986</color>
     <color name="yellow">#fff9ec4f</color>
+
+    <array name="colorArray">
+        <item name="red1">@color/red</item>
+        <item name="grey1">@color/grey</item>
+        <item name="blue1">@color/blue</item>
+        <item name="green1">@color/green</item>
+        <item name="yellow1">@color/yellow</item>
+    </array>
 </resources>
