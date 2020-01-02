@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".History"></activity>
+        <receiver android:name=".AlertReceiver" />
     </application>
 
 </manifest>

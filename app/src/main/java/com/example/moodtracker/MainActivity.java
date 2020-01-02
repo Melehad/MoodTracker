@@ -4,7 +4,10 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,10 +24,16 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import static com.example.moodtracker.R.id.edit_text_com;
+
+
+import java.text.DateFormat;
+import java.util.Calendar;
+
 import static com.example.moodtracker.R.id.background_activity;
+import static com.example.moodtracker.R.id.edit_text_com;
 
 public class MainActivity extends AppCompatActivity {
+
 
     private ImageView changeSmiley;
     private static TextView mEdit;
@@ -48,18 +57,24 @@ public class MainActivity extends AppCompatActivity {
     private int[] tabSmiley = {R.drawable.smile_sad, R.drawable.smile_disappointed,
             R.drawable.smile_normal, R.drawable.smile_happy, R.drawable.smile_sup_happy};
 
+    private String text;
+    private Integer col;
+    private String textComToday;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mImgHappy = findViewById(R.id.smiley);
         mClickCom = findViewById(R.id.com);
         mClickHistory = findViewById(R.id.history);
-
         mEdit = findViewById(R.id.edit_text_com);
         mTextComSave = findViewById(R.id.text_com_save);
         changeSmiley = findViewById(R.id.smiley);
+
 
         // this is the view we will add the gesture detector to
         View myView = findViewById(background_activity);
@@ -68,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         // Add a touch listener to the view
         // The touch listener passes all its events on to the gesture detector
         myView.setOnTouchListener(touchListener);
-        // add com button listener
+
         // add com button listener
         mClickCom.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -98,10 +113,8 @@ public class MainActivity extends AppCompatActivity {
                                     toast.show();
                                 }
                                 dialog.cancel();
-
                             }
                         });
-
                 builder1.setNegativeButton(
                         "ANNULER",
                         new DialogInterface.OnClickListener() {
@@ -109,20 +122,29 @@ public class MainActivity extends AppCompatActivity {
                                 dialog.cancel();
                             }
                         });
-
                 AlertDialog alert11 = builder1.create();
                 alert11.show();
             }
         });
 
-        // add com button listener
+        // add history button listener
         mClickHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent newIntent = new Intent(MainActivity.this, History.class);
-                startActivity(newIntent);
+                saveColorData();
+                Intent newGameActivityIntent = new Intent(MainActivity.this, History.class);
+                startActivity(newGameActivityIntent);
             }
         });
+
+
+        onAlarmSet(18, 06);
+    }
+
+
+    @SuppressLint("ResourceAsColor")
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
     }
 
     public void saveData(){
@@ -139,20 +161,23 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
     }
 
-
-    @SuppressLint("ResourceAsColor")
-    public boolean onTouchEvent(MotionEvent event) {
-        return super.onTouchEvent(event);
-    }
-
+    // This touch listener passes everything on to the gesture detector.
+    // That saves us the trouble of interpreting the raw touch events
+    // ourselves.
     View.OnTouchListener touchListener = new View.OnTouchListener() {
         @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+            // pass the events to the gesture detector
+            // a return value of true means the detector is handling it
+            // a return value of false means the detector didn't
+            // recognize the event
             return mDetector.onTouchEvent(event);
         }
     };
 
+    // In the SimpleOnGestureListener subclass you should override
+    // onDown and any other gesture that you want to detect.
     class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
 
         @Override
@@ -207,6 +232,38 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+
+    /*
+    private void updateTimeText(Calendar c) {
+        String timeText = "Alarm set for: ";
+        timeText += DateFormat.getTimeInstance(DateFormat.SHORT).format(c.getTime());
+
+        mTextView.setText(timeText);
+    }
+     */
+
+
+
+    public void onAlarmSet(int hourOfDay, int minute) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        c.set(Calendar.MINUTE, minute);
+        c.set(Calendar.SECOND, 0);
+
+        //Log.i("TAG", "test alarme");
+        startAlarm(c);
+    }
+
+    private void startAlarm(Calendar c) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+
+        if (c.before(Calendar.getInstance())) {
+            c.add(Calendar.DATE, 1);
+        }
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
     }
 
 

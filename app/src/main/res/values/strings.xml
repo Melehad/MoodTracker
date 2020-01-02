@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">MoodTracker</string>
+
+    <string name="weekAgo">Il y a une semaine</string>
+    <string name="sixAgo">Il y a 6 jours</string>
+    <string name="fiveAgo">Il y a 5 jours</string>
+    <string name="fourAgo">Il y a 4 jours</string>
+    <string name="threeAgo">Il y a 3 jours</string>
+    <string name="twoAgo">Avant-hier</string>
+    <string name="oneAgo">Hier</string>
+
+    <string-array name="stringDayArray">
+        <item name="weekAgoArr">@string/weekAgo</item>
+        <item name="sixAgoArr">@string/sixAgo</item>
+        <item name="fiveAgoArr">@string/fiveAgo</item>
+        <item name="fourAgoArr">@string/fourAgo</item>
+        <item name="threeAgoArr">@string/threeAgo</item>
+        <item name="twoAgoArr">@string/twoAgo</item>
+        <item name="oneAgoArr">@string/oneAgo</item>
+    </string-array>
 </resources>
