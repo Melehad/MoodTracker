@@ -1,36 +1,41 @@
 package com.example.moodtracker;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import java.util.ArrayList;
+import java.util.List;
 import static com.example.moodtracker.MainActivity.STRCOLOR;
 import static com.example.moodtracker.MainActivity.SHARED_PREFS;
 
+
 public class History extends AppCompatActivity implements View.OnClickListener {
 
+    ///////////////////////////// VARIABLES /////////////////////////////
+
+    private ListView mListView;
     ImageView img;
     ImageView img1;
     TextView txt;
-
     public static final String TEXT = "text";
     private String text;
     private Integer col;
+    private String textComToday;
+
+    // variables of comment buttons
+    /*
     private ImageView mClickComOne;
     private ImageView mClickComTwo;
     private ImageView mClickComThree;
@@ -38,11 +43,11 @@ public class History extends AppCompatActivity implements View.OnClickListener {
     private ImageView mClickComFive;
     private ImageView mClickComSix;
     private ImageView mClickComSeven;
-    //private int[] reLayTab = {R.id.rel_lay_yesterday, R.id.rel_lay_day_before_yesterday, R.id.rel_lay_three_days_ago
-            //, R.id.rel_lay_four_days_ago, R.id.rel_lay_five_days_ago, R.id.rel_lay_six_days_ago, R.id.rel_lay_one_week_ago};
 
-    private String textComTest;
-    private String textComToday;
+     */
+
+
+    ///////////////////////////// ON CREATE /////////////////////////////
 
     @SuppressLint({"ResourceAsColor", "ResourceType"})
     @Override
@@ -50,21 +55,15 @@ public class History extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
+        //====================== findViewById ======================//
+
+        RelativeLayout rel7 = (RelativeLayout)findViewById(R.id.customView7);
         TextView txt = (TextView)findViewById(R.id.message_view);
         ImageView img = (ImageView) findViewById(R.id.thumbnail_view);
+        mListView = (ListView) findViewById(R.id.listView);
 
-        Resources ressourcesDay = getResources();
-        String[] myStringDayArray = ressourcesDay.getStringArray(R.array.stringDayArray);
-        //txt.setText(myStringDayArray[4]);
-
+        // findView of comment buttons
         /*
-        for (int nombre = 1; nombre<=100; nombre++){
-
-        }
-         */
-        // 0="weekAgo">Il y a une semaine // 1="sixAgo">Il y a 6 jours // 2="fiveAgo">Il y a 5 jours
-        // 3="fourAgo">Il y a 4 jours // 4="threeAgo">Il y a 3 jours // 5="twoAgo">Avant-hier // 6="oneAgo">Hier
-/*
         mClickComOne = findViewById(R.id.btn_com_one);
         mClickComTwo = findViewById(R.id.btn_com_two);
         mClickComThree = findViewById(R.id.btn_com_three);
@@ -79,7 +78,14 @@ public class History extends AppCompatActivity implements View.OnClickListener {
         mClickComFive.setVisibility(View.INVISIBLE);
         mClickComSix.setVisibility(View.INVISIBLE);
         mClickComSeven.setVisibility(View.INVISIBLE);
- */
+        */
+
+        //====================== VARIABLES ======================//
+
+        Resources ressourcesDay = getResources();
+        String[] myStringDayArray = ressourcesDay.getStringArray(R.array.stringDayArray);
+        //txt.setText(myStringDayArray[4]);
+
         Resources ressourcesColor = getResources();
         int[] myColorArray = ressourcesColor.getIntArray(R.array.colorArray);
 
@@ -92,11 +98,14 @@ public class History extends AppCompatActivity implements View.OnClickListener {
         //RelativeLayout reLaySixDaysAgo = findViewById(R.id.rel_lay_six_days_ago);
         //RelativeLayout reLayOneWeekAgo = findViewById(R.id.rel_lay_one_week_ago);
 
-        comToday();
         img.setOnClickListener(this);
         //customMargin();
         //customLayout();
-/*
+
+        //afficherListeDays();
+
+        // setOnClickListener of comment buttons
+        /*
         mClickComOne.setOnClickListener(new View.OnClickListener() {
             public void onClick(final View view) {
                 customToast(view);
@@ -134,6 +143,14 @@ public class History extends AppCompatActivity implements View.OnClickListener {
         });
 
  */
+
+    }
+
+    ///////////////////////////// OTHER METHODS /////////////////////////////
+
+    @Override
+    public void onClick(View view) {
+
     }
 
     private void loadData() {
@@ -141,6 +158,32 @@ public class History extends AppCompatActivity implements View.OnClickListener {
         text = sharedPreferences.getString(TEXT, "");
         col =  sharedPreferences.getInt(STRCOLOR, -1);
     }
+
+    private List<Days> genererDays(){
+        Resources ressourcesDay = getResources();
+        String[] myStringDayArray = ressourcesDay.getStringArray(R.array.stringDayArray);
+
+        List<Days> days = new ArrayList<Days>();
+        days.add(new Days(Color.BLACK, myStringDayArray[0]));
+        days.add(new Days(Color.BLUE, myStringDayArray[1]));
+        days.add(new Days(Color.GREEN, myStringDayArray[2]));
+        days.add(new Days(Color.RED, myStringDayArray[3]));
+        days.add(new Days(Color.GRAY, myStringDayArray[4]));
+        days.add(new Days(Color.YELLOW, myStringDayArray[5]));
+        days.add(new Days(Color.MAGENTA, myStringDayArray[6]));
+        return days;
+    }
+
+    private void afficherListeDays(){
+        List<Days> days = genererDays();
+
+        DaysAdapter adapter = new DaysAdapter(History.this, days);
+        mListView.setAdapter(adapter);
+    }
+
+
+    ///////////////////////////// CUSTOM /////////////////////////////
+
 
     private void customToast(View view) {
         LayoutInflater inflater = getLayoutInflater();
@@ -157,6 +200,7 @@ public class History extends AppCompatActivity implements View.OnClickListener {
         toast.show();
     }
 
+    // customLayout
     /*
     @SuppressLint("ResourceAsColor")
     private void customLayout() {
@@ -182,6 +226,7 @@ public class History extends AppCompatActivity implements View.OnClickListener {
     }
      */
 
+    // customMargin
     /*
     private void customMargin() {
         LinearLayout linLay = findViewById(R.id.rel_lay_six_days_ago);
@@ -193,16 +238,8 @@ public class History extends AppCompatActivity implements View.OnClickListener {
     }
      */
 
-    @Override
-    public void onClick(View view) {
 
-    }
 
-    private void comToday() {
-        loadData();
-        textComToday = text;
-        Log.i("TAG", textComToday);
-    }
 
 
 }

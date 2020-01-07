@@ -2,7 +2,6 @@ package com.example.moodtracker;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -24,9 +23,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
-import java.text.DateFormat;
 import java.util.Calendar;
 
 import static com.example.moodtracker.R.id.background_activity;
@@ -34,6 +30,7 @@ import static com.example.moodtracker.R.id.edit_text_com;
 
 public class MainActivity extends AppCompatActivity {
 
+    ///////////////////////////// VARIABLES /////////////////////////////
 
     private ImageView changeSmiley;
     private static TextView mEdit;
@@ -61,12 +58,14 @@ public class MainActivity extends AppCompatActivity {
     private Integer col;
     private String textComToday;
 
+    ///////////////////////////// ON CREATE /////////////////////////////
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //====================== findViewById ======================//
 
         mImgHappy = findViewById(R.id.smiley);
         mClickCom = findViewById(R.id.com);
@@ -74,10 +73,11 @@ public class MainActivity extends AppCompatActivity {
         mEdit = findViewById(R.id.edit_text_com);
         mTextComSave = findViewById(R.id.text_com_save);
         changeSmiley = findViewById(R.id.smiley);
-
-
         // this is the view we will add the gesture detector to
         View myView = findViewById(background_activity);
+
+        //====================== VARIABLES ======================//
+
         // get the gesture detector
         mDetector = new GestureDetector(this, new MyGestureListener());
         // Add a touch listener to the view
@@ -137,10 +137,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        onAlarmSet(18, 06);
+        loadData();
+        //comToday();
+        onAlarmSet(20, 39);
     }
 
+
+
+    ///////////////////////////// OTHER METHODS /////////////////////////////
 
     @SuppressLint("ResourceAsColor")
     public boolean onTouchEvent(MotionEvent event) {
@@ -175,6 +179,22 @@ public class MainActivity extends AppCompatActivity {
             return mDetector.onTouchEvent(event);
         }
     };
+
+    private void loadData() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        text = sharedPreferences.getString(TEXT, "");
+        col =  sharedPreferences.getInt(STRCOLOR, -1);
+    }
+
+    private void comToday() {
+        loadData();
+        textComToday = text;
+        Log.i("TAG", textComToday);
+    }
+
+
+
+    ///////////////////////////// GESTURE CLASS /////////////////////////////
 
     // In the SimpleOnGestureListener subclass you should override
     // onDown and any other gesture that you want to detect.
@@ -234,16 +254,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /*
-    private void updateTimeText(Calendar c) {
-        String timeText = "Alarm set for: ";
-        timeText += DateFormat.getTimeInstance(DateFormat.SHORT).format(c.getTime());
-
-        mTextView.setText(timeText);
-    }
-     */
 
 
+
+    ///////////////////////////// ALARM /////////////////////////////
 
     public void onAlarmSet(int hourOfDay, int minute) {
         Calendar c = Calendar.getInstance();
@@ -251,10 +265,8 @@ public class MainActivity extends AppCompatActivity {
         c.set(Calendar.MINUTE, minute);
         c.set(Calendar.SECOND, 0);
 
-        //Log.i("TAG", "test alarme");
         startAlarm(c);
     }
-
     private void startAlarm(Calendar c) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver.class);
@@ -265,6 +277,5 @@ public class MainActivity extends AppCompatActivity {
         }
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
     }
-
 
 }
