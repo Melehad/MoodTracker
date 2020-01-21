@@ -35,7 +35,7 @@ public class History extends AppCompatActivity implements View.OnClickListener {
     private String textComToday;
 
     // variables of comment buttons
-    /*
+    /**/
     private ImageView mClickComOne;
     private ImageView mClickComTwo;
     private ImageView mClickComThree;
@@ -44,7 +44,7 @@ public class History extends AppCompatActivity implements View.OnClickListener {
     private ImageView mClickComSix;
     private ImageView mClickComSeven;
 
-     */
+     /**/
 
 
     ///////////////////////////// ON CREATE /////////////////////////////
@@ -53,7 +53,7 @@ public class History extends AppCompatActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_history);
+        setContentView(R.layout.activity_history_2);
 
         //====================== findViewById ======================//
 
@@ -63,7 +63,7 @@ public class History extends AppCompatActivity implements View.OnClickListener {
         mListView = (ListView) findViewById(R.id.listView);
 
         // findView of comment buttons
-        /*
+
         mClickComOne = findViewById(R.id.btn_com_one);
         mClickComTwo = findViewById(R.id.btn_com_two);
         mClickComThree = findViewById(R.id.btn_com_three);
@@ -71,6 +71,7 @@ public class History extends AppCompatActivity implements View.OnClickListener {
         mClickComFive = findViewById(R.id.btn_com_five);
         mClickComSix = findViewById(R.id.btn_com_six);
         mClickComSeven = findViewById(R.id.btn_com_seven);
+        /*
         mClickComOne.setVisibility(View.INVISIBLE);
         mClickComTwo.setVisibility(View.INVISIBLE);
         mClickComThree.setVisibility(View.INVISIBLE);
@@ -98,14 +99,13 @@ public class History extends AppCompatActivity implements View.OnClickListener {
         //RelativeLayout reLaySixDaysAgo = findViewById(R.id.rel_lay_six_days_ago);
         //RelativeLayout reLayOneWeekAgo = findViewById(R.id.rel_lay_one_week_ago);
 
-        img.setOnClickListener(this);
+        //img.setOnClickListener(this);
         //customMargin();
         //customLayout();
-
         //afficherListeDays();
 
         // setOnClickListener of comment buttons
-        /*
+
         mClickComOne.setOnClickListener(new View.OnClickListener() {
             public void onClick(final View view) {
                 customToast(view);
@@ -142,8 +142,7 @@ public class History extends AppCompatActivity implements View.OnClickListener {
             }
         });
 
- */
-
+        loadData();
     }
 
     ///////////////////////////// OTHER METHODS /////////////////////////////
@@ -159,6 +158,8 @@ public class History extends AppCompatActivity implements View.OnClickListener {
         col =  sharedPreferences.getInt(STRCOLOR, -1);
     }
 
+    //Access to ListView
+    /*
     private List<Days> genererDays(){
         Resources ressourcesDay = getResources();
         String[] myStringDayArray = ressourcesDay.getStringArray(R.array.stringDayArray);
@@ -181,6 +182,8 @@ public class History extends AppCompatActivity implements View.OnClickListener {
         mListView.setAdapter(adapter);
     }
 
+     */
+
 
     ///////////////////////////// CUSTOM /////////////////////////////
 
@@ -191,7 +194,7 @@ public class History extends AppCompatActivity implements View.OnClickListener {
         //String strDate = getDate();
         TextView textToast = layout.findViewById(R.id.text_toast);
         //textToast.setText(strDate);
-        textToast.setText(textComToday);
+        textToast.setText(text);
         Toast toast = new Toast(view.getContext());
 
         toast.setGravity(Gravity.BOTTOM, 0, 20);
