@@ -139,7 +139,8 @@ public class MainActivity extends AppCompatActivity {
 
         loadData();
         //comToday();
-        onAlarmSet(20, 52);
+        onAlarmSet1(22, 26, 00);
+        onAlarmSet2(22, 26, 30);
 
 
     }
@@ -261,14 +262,23 @@ public class MainActivity extends AppCompatActivity {
 
     ///////////////////////////// ALARM /////////////////////////////
 
-    public void onAlarmSet(int hourOfDay, int minute) {
+    public void onAlarmSet1(int hourOfDay, int minute, int second) {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, hourOfDay);
         c.set(Calendar.MINUTE, minute);
-        c.set(Calendar.SECOND, 0);
-        startAlarm(c);
+        c.set(Calendar.SECOND, second);
+        startAlarm1(c);
     }
-    private void startAlarm(Calendar c) {
+
+    public void onAlarmSet2(int hourOfDay, int minute, int second) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        c.set(Calendar.MINUTE, minute);
+        c.set(Calendar.SECOND, second);
+        startAlarm2(c);
+    }
+
+    private void startAlarm1(Calendar c) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
@@ -277,7 +287,17 @@ public class MainActivity extends AppCompatActivity {
             c.add(Calendar.DATE, 1);
         }
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
-        Log.i("TAG", "alarm");
+    }
+
+    private void startAlarm2(Calendar c) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+
+        if (c.before(Calendar.getInstance())) {
+            c.add(Calendar.DATE, 1);
+        }
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
     }
 
 }

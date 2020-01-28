@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,10 +30,17 @@ public class History extends AppCompatActivity implements View.OnClickListener {
     ImageView img;
     ImageView img1;
     TextView txt;
+
     public static final String TEXT = "text";
+    public static final String TEXT_ONE = "text_one";
+    private String text_one = "first mood";
+
     private String text;
     private Integer col;
     private String textComToday;
+
+    private String textOne;
+    private String textTwo;
 
     // variables of comment buttons
     /**/
@@ -143,6 +151,7 @@ public class History extends AppCompatActivity implements View.OnClickListener {
         });
 
         loadData();
+        customLayout();
     }
 
     ///////////////////////////// OTHER METHODS /////////////////////////////
@@ -194,7 +203,8 @@ public class History extends AppCompatActivity implements View.OnClickListener {
         //String strDate = getDate();
         TextView textToast = layout.findViewById(R.id.text_toast);
         //textToast.setText(strDate);
-        textToast.setText(text);
+        textToast.setText(textOne);
+
         Toast toast = new Toast(view.getContext());
 
         toast.setGravity(Gravity.BOTTOM, 0, 20);
@@ -203,31 +213,15 @@ public class History extends AppCompatActivity implements View.OnClickListener {
         toast.show();
     }
 
-    // customLayout
-    /*
+
     @SuppressLint("ResourceAsColor")
     private void customLayout() {
-        loadData();
-        textComTest = text;
-        if(textComTest.equals("")) {
-            mClickComOne.setVisibility(View.INVISIBLE);
-            mClickComTwo.setVisibility(View.INVISIBLE);
-            mClickComThree.setVisibility(View.INVISIBLE);
-            mClickComFour.setVisibility(View.INVISIBLE);
-            mClickComFive.setVisibility(View.INVISIBLE);
-            mClickComSix.setVisibility(View.INVISIBLE);
-            mClickComSeven.setVisibility(View.INVISIBLE);
-        } else {
-            mClickComOne.setVisibility(View.VISIBLE);
-            mClickComTwo.setVisibility(View.VISIBLE);
-            mClickComThree.setVisibility(View.VISIBLE);
-            mClickComFour.setVisibility(View.VISIBLE);
-            mClickComFive.setVisibility(View.VISIBLE);
-            mClickComSix.setVisibility(View.VISIBLE);
-            mClickComSeven.setVisibility(View.VISIBLE);
-        }
+
+        loadDataYesterday();
+
     }
-     */
+
+
 
     // customMargin
     /*
@@ -243,6 +237,18 @@ public class History extends AppCompatActivity implements View.OnClickListener {
 
 
 
+    private void loadDataYesterday() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        text_one = sharedPreferences.getString(TEXT_ONE, "");
+        textOne = text_one;
+        if(textOne.equals("")) {
+            mClickComOne.setVisibility(View.INVISIBLE);
+            Log.i("TAG", "empty");
+        } else {
+            mClickComOne.setVisibility(View.VISIBLE);
+            Log.i("TAG", textOne);
+        }
+    }
 
 
 }
