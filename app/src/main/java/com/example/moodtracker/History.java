@@ -34,6 +34,8 @@ public class History extends AppCompatActivity implements View.OnClickListener {
     public static final String TEXT = "text";
     public static final String TEXT_ONE = "text_one";
     private String text_one = "first mood";
+    public static final String TEXT_TWO = "text_two";
+    private String text_two = "second mood";
 
     private String text;
     private Integer col;
@@ -217,7 +219,9 @@ public class History extends AppCompatActivity implements View.OnClickListener {
     @SuppressLint("ResourceAsColor")
     private void customLayout() {
 
+
         loadDataYesterday();
+        //loadData2daysAgo();
 
     }
 
@@ -246,7 +250,20 @@ public class History extends AppCompatActivity implements View.OnClickListener {
             Log.i("TAG", "empty");
         } else {
             mClickComOne.setVisibility(View.VISIBLE);
-            Log.i("TAG", textOne);
+            Log.i("TAG", "com d'hier : " + textOne);
+        }
+    }
+
+    private void loadData2daysAgo() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        text_two = sharedPreferences.getString(TEXT_TWO, "");
+        textTwo = text_two;
+        if(textTwo.equals("")) {
+            mClickComTwo.setVisibility(View.INVISIBLE);
+            //Log.i("TAG", "empty");
+        } else {
+            mClickComTwo.setVisibility(View.VISIBLE);
+            //Log.i("TAG", textTwo);
         }
     }
 

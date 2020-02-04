@@ -139,8 +139,8 @@ public class MainActivity extends AppCompatActivity {
 
         loadData();
         //comToday();
-        onAlarmSet1(22, 26, 00);
-        onAlarmSet2(22, 26, 30);
+        onAlarmSet1(21, 30, 00);
+        //onAlarmSet2(20, 51, 30);
 
 
     }
@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                 changeSmiley.setImageResource(tabSmiley[position]);
             }
 
-            Log.i("TAG", "onFling: ");
+            //Log.i("TAG", "onFling: ");
 
             return true;
         }
@@ -287,12 +287,13 @@ public class MainActivity extends AppCompatActivity {
             c.add(Calendar.DATE, 1);
         }
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+        //setRepeting
     }
 
     private void startAlarm2(Calendar c) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 2, intent, 0);
 
         if (c.before(Calendar.getInstance())) {
             c.add(Calendar.DATE, 1);
